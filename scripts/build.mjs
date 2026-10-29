@@ -17,6 +17,7 @@ import {
   projectCard,
   projectGallery,
 } from "./components.mjs";
+import { cvContent, documentActions } from "./documents.mjs";
 process.chdir(fileURLToPath(new URL("../", import.meta.url)));
 await mkdir("_site", { recursive: true });
 // Publish only site assets; the original template and its unused libraries stay in the repository.
@@ -26,6 +27,7 @@ for (const dir of ["css", "js", "fonts", "img/brand"]) {
 for (const path of ["css/portfolio.css", "js/portfolio.js", "img/portrait.jpg"])
   await cp(`assets/${path}`, `_site/assets/${path}`);
 await cp("assets/fonts", "_site/assets/fonts", { recursive: true });
+await cp("assets/documents", "_site/assets/documents", { recursive: true });
 await cp("assets/img/brand", "_site/assets/img/brand", { recursive: true });
 await cp("assets/img/projects", "_site/assets/img/projects", {
   recursive: true,
@@ -60,6 +62,7 @@ const slots = {
     )
     .join(""),
   SOCIALS: socialLinks(),
+  DOCUMENT_ACTIONS: documentActions(),
   CONTACT_ACTION: contactAction,
 };
 for (const [slot, value] of Object.entries(slots))
@@ -71,6 +74,17 @@ await writeFile(
     description:
       "Mobile experiences that solve real problems. Explore Iddan Gunawan’s work in Android, cross-platform products, and connected devices.",
     body: home,
+  }),
+);
+await mkdir("_site/cv", { recursive: true });
+await writeFile(
+  "_site/cv/index.html",
+  document({
+    title: "CV — Iddan Gunawan",
+    description:
+      "Read Iddan Gunawan’s professional CV: mobile engineering experience, technical skills, education, and selected projects. Download CV, resume, and portfolio PDFs.",
+    path: "cv/",
+    body: `<main id="main" class="cv-page wrap"><a class="text-link" href="/">← Back to the portfolio</a><div class="cv-downloads"><a class="button button-pink" href="/assets/documents/iddan-gunawan-cv.pdf" download="iddan-gunawan-cv.pdf">Download CV ↓</a><a class="text-link" href="/assets/documents/iddan-gunawan-cv.pdf">Open CV PDF ↗</a></div><article class="cv-document">${cvContent()}</article></main>`,
   }),
 );
 for (const [i, p] of projects.entries()) {
@@ -106,7 +120,7 @@ for (const [old, target] of [
   );
 await writeFile(
   "_site/sitemap.xml",
-  `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["", ...projects.map((p) => `projects/${p.slug}/`)].map((p) => `<url><loc>https://iddangunawan.github.io/${p}</loc></url>`).join("")}</urlset>`,
+  `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${["", "cv/", ...projects.map((p) => `projects/${p.slug}/`)].map((p) => `<url><loc>https://iddangunawan.github.io/${p}</loc></url>`).join("")}</urlset>`,
 );
 await writeFile(
   "_site/robots.txt",

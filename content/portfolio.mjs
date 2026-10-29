@@ -594,6 +594,11 @@ export const experience = [
     dates: "Mar 2024 — Nov 2024",
     summary:
       "KoltiTrace MIS Farm Gate, Farm Extension, and Koltipay. Mobile/IoT connectivity, OTA R&D, and performance optimization.",
+    responsibilities: [
+      "Connected IoT devices with mobile applications.",
+      "Researched over-the-air updates for IoT devices through mobile apps.",
+      "Optimized software performance and enhanced existing Android application functionality.",
+    ],
     verifiedTitle: true,
   },
   {
@@ -602,6 +607,11 @@ export const experience = [
     dates: "Jun 2023 — Feb 2024",
     summary:
       "Sally Mobile, REST API backend work, and cross-functional UI collaboration.",
+    responsibilities: [
+      "Developed mobile interfaces and optimized application performance.",
+      "Collaborated with cross-functional design and development teams.",
+      "Created and implemented a RESTful API backend for an Android application.",
+    ],
     verifiedTitle: true,
   },
   {
@@ -611,6 +621,11 @@ export const experience = [
     note: "The December 2024 résumé records Mar 2020–May 2023. Indexed LinkedIn lists Android Developer, Jun 2022–May 2023. Both records are retained; the résumé period overlaps other listed roles.",
     summary:
       "Android application delivery, custom interfaces, usability, and performance.",
+    responsibilities: [
+      "Delivered an Android application from initial concept through production.",
+      "Improved navigation and maintained alignment with Android standards.",
+      "Optimized existing applications and developed custom Android interfaces.",
+    ],
     verifiedTitle: true,
   },
   {

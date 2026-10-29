@@ -1641,3 +1641,84 @@ body:has(.image-dialog[open]) {
 .feature-list strong {
   color: var(--ink);
 }
+
+.document-actions,
+.cv-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  margin-block: 24px 32px;
+}
+.document-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.document-download:hover {
+  text-decoration-thickness: 2px;
+}
+.cv-page {
+  max-width: 920px;
+  padding-block: 48px 100px;
+}
+.cv-document {
+  max-width: 760px;
+}
+.cv-document h1 {
+  font-size: clamp(40px, 8vw, 72px);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.cv-document h2 {
+  font-size: clamp(25px, 4vw, 36px);
+  line-height: 1.2;
+  margin-block: 48px 20px;
+}
+.cv-document h3 {
+  font-size: 21px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.cv-document p {
+  margin-bottom: 12px;
+}
+.cv-document a {
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cv-document ul {
+  padding-left: 22px;
+  margin-bottom: 16px;
+}
+.cv-document .doc-role,
+.cv-document .doc-project {
+  margin-bottom: 32px;
+}
+.cv-document .doc-masthead {
+  border-bottom: var(--line);
+  padding-bottom: 24px;
+}
+.cv-document .doc-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.cv-document .doc-position {
+  font-size: 21px;
+}
+.cv-document .doc-meta,
+.cv-document .doc-note {
+  color: var(--muted);
+  font-size: 14px;
+}
+.cv-document .doc-contact {
+  font-size: 14px;
+}

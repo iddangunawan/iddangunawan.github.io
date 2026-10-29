@@ -67,3 +67,21 @@ NODE_PATH=/tmp/portfolio-browser-qa/node_modules node scripts/browser-check.cjs
 ```
 
 Set `BROWSER_PATH` to use a different Chrome executable. This checks seven viewport widths, axe WCAG A/AA rules, filtering and project order, experience expansion, menu dismissal, all project detail refreshes at mobile and desktop widths, image decoding, gallery popup keyboard/focus/dismissal behavior, and gallery accessibility, reduced motion, JavaScript-disabled navigation, copy-email success/failure, and runtime/network errors. Screenshots are written to `/tmp/portfolio-390.png` and `/tmp/portfolio-1440.png`. Browser tooling stays outside the project dependencies.
+
+## CV, resume, and portfolio PDFs
+
+The About section links to the readable static `/cv/` page and three distinct PDF downloads. Final files live in `assets/documents/` and are copied unchanged into the GitHub Pages build. The CV page uses HTML, so it works on mobile, with JavaScript disabled, and in browsers without PDF support; “Open CV PDF” also allows normal browser PDF controls.
+
+`content/portfolio.mjs` supplies profile, employment, skills, project context, verified contributions, and achievements. `content/professional.mjs` adds the source-verified education/training, shared summary, and document filenames. `scripts/documents.mjs` renders all three documents and the CV page from these shared sources. `assets/css/documents.css` provides print layouts using the existing self-hosted fonts and palette. The comprehensive CV uses all published employment and selected projects; the two-page resume emphasizes recent mobile roles and connected-device work; the seven-page visual portfolio includes an introduction and six featured case studies.
+
+After editing shared content, regenerate and review the PDFs before committing them:
+
+```sh
+# Optional local tooling, kept outside the project dependencies:
+npm install --prefix /tmp/portfolio-browser-qa --no-audit --no-fund playwright
+NODE_PATH=/tmp/portfolio-browser-qa/node_modules node scripts/generate-documents.cjs
+node scripts/build.mjs
+node --test
+```
+
+The generator uses installed Google Chrome on macOS. Set `BROWSER_PATH` to an installed Chrome/Chromium executable elsewhere. It waits for local fonts and images, preserves selectable text and clickable links, and adds page numbers. PDF generation is an explicit local step; GitHub Actions only builds the site using committed PDFs and does not install browser tooling. Review every PDF page for layout and verify the resume remains at most two pages when content changes. No source PDFs, private phone numbers, or residential addresses are published.

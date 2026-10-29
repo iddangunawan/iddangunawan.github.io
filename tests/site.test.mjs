@@ -247,7 +247,14 @@ test("verified résumé contact and source discrepancies are visible", async () 
   }
   const output = await files(root);
   assert.ok(
-    output.every((file) => !/\.(pdf|php)$/i.test(file)),
+    output.every(
+      (file) =>
+        !/\.php$/i.test(file) &&
+        (!/\.pdf$/i.test(file) ||
+          /assets\/documents\/iddan-gunawan-(cv|resume|portfolio)\.pdf$/.test(
+            file,
+          )),
+    ),
     "Private source PDFs and PHP are not published",
   );
 });
@@ -538,5 +545,61 @@ test("SENTRY Nurse is listed once with all official product images and configura
   assert.doesNotMatch(
     page,
     /<h2>My contribution|<h2>Documented outcomes|src="https?:/,
+  );
+});
+
+test("professional documents have distinct PDFs, accessible actions, and a readable static CV", async () => {
+  const { documents, professional } =
+    await import("../content/professional.mjs");
+  const { cvContent, printContent } = await import("../scripts/documents.mjs");
+  const home = await readFile("_site/index.html", "utf8");
+  const cv = await readFile("_site/cv/index.html", "utf8");
+  assert.ok(home.includes('href="/cv/"'));
+  assert.doesNotMatch(home, /href="\/cv\/"[^>]*download/);
+  assert.match(cv, /<title>CV — Iddan Gunawan/);
+  assert.ok(cv.includes('href="/">← Back to the portfolio'));
+  for (const heading of [
+    "Professional summary",
+    "Work experience",
+    "Technical skills",
+    "Education &amp; training",
+    "Relevant projects &amp; documented achievements",
+  ])
+    assert.ok(cv.includes(heading));
+  assert.ok(cv.includes(escape(professional.education.institution)));
+  for (const role of experience) assert.ok(cv.includes(escape(role.company)));
+  assert.doesNotMatch(cv, /082214296034|Currently contributing|10\+ years/);
+  const buffers = [];
+  for (const doc of documents) {
+    const link = `href="/assets/documents/${doc.filename}" download="${doc.filename}"`;
+    assert.ok(home.includes(link));
+    if (doc.id === "cv") assert.ok(cv.includes(link));
+    const bytes = await readFile(
+      path.join(root, "assets/documents", doc.filename),
+    );
+    assert.equal(bytes.subarray(0, 5).toString(), "%PDF-");
+    assert.ok(bytes.length > 10000);
+    assert.ok(bytes.includes(Buffer.from("/Font")));
+    buffers.push(bytes);
+  }
+  assert.ok(
+    !buffers[0].equals(buffers[1]) &&
+      !buffers[1].equals(buffers[2]) &&
+      !buffers[0].equals(buffers[2]),
+  );
+  assert.equal(cvContent(), printContent("cv"));
+  assert.equal(
+    (printContent("resume").match(/class="resume-page"/g) || []).length,
+    2,
+  );
+  assert.equal(
+    (printContent("portfolio").match(/class="portfolio-case"/g) || []).length,
+    projects.filter((p) => p.featured).length,
+  );
+  assert.throws(() => printContent("invalid"), /Unknown document/);
+  assert.ok(
+    (await readFile("_site/sitemap.xml", "utf8")).includes(
+      "https://iddangunawan.github.io/cv/",
+    ),
   );
 });
